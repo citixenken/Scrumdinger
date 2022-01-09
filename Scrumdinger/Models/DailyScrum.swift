@@ -7,18 +7,28 @@
 
 import Foundation
 
-struct DailyScrum {
+struct DailyScrum: Identifiable {
     
+    let id: UUID
     var title: String
     var attendees: [String]
     var lengthOfMinutes: Int
     var theme: Theme
+    
+    init(id: UUID = UUID(), title: String, attendees: [String], lengthOfMinutes: Int, theme: Theme) {
+        self.id = id
+        self.title = title
+        self.attendees = attendees
+        self.lengthOfMinutes = lengthOfMinutes
+        self.theme = theme
+        
+    }
 }
 
 //extension with sample data
 extension DailyScrum {
     static let sampleData: [DailyScrum] = [
-        DailyScrum(title: "CoreML", attendees: ["John", "Terry", "Gillian", "Oduor", "Zani"], lengthOfMinutes: 10, theme: .yellow),
+        DailyScrum(title: "CoreML", attendees: ["John", "Terry", "Gillian", "Oduor", "Zani", "Zeytuni"], lengthOfMinutes: 10, theme: .yellow),
         DailyScrum(title: "TensorFlow", attendees: ["Ken", "Michelle", "Dustin", "Frank", "Sarah"], lengthOfMinutes: 8, theme: .orange),
         DailyScrum(title: "MapKit", attendees: ["Chela ", "Euna", "Gray", "Daisy", "Margo", "Taylor", "Axelrod", "Safina", "Orrin"], lengthOfMinutes: 5, theme: .poppy)
 
