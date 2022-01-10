@@ -12,14 +12,14 @@ struct DailyScrum: Identifiable {
     let id: UUID
     var title: String
     var attendees: [Attendee]
-    var lengthOfMinutes: Int
+    var lengthInMinutes: Int
     var theme: Theme
     
     init(id: UUID = UUID(), title: String, attendees: [String], lengthOfMinutes: Int, theme: Theme) {
         self.id = id
         self.title = title
         self.attendees = attendees.map { Attendee(name: $0) }
-        self.lengthOfMinutes = lengthOfMinutes
+        self.lengthInMinutes = lengthOfMinutes
         self.theme = theme
         
     }
@@ -31,7 +31,7 @@ extension DailyScrum {
         DailyScrum(title: "CoreML", attendees: ["John", "Terry", "Gillian", "Oduor", "Zani", "Zeytuni"], lengthOfMinutes: 10, theme: .yellow),
         DailyScrum(title: "TensorFlow", attendees: ["Ken", "Michelle", "Dustin", "Frank", "Sarah"], lengthOfMinutes: 8, theme: .orange),
         DailyScrum(title: "MapKit", attendees: ["Chela ", "Euna", "Gray", "Daisy", "Margo", "Taylor", "Axelrod", "Safina", "Orrin"], lengthOfMinutes: 5, theme: .poppy)
-
+        
     ]
 }
 
@@ -44,5 +44,25 @@ extension DailyScrum {
             self.id = id
             self.name = name
         }
+    }
+    
+    //Data structure
+    
+    
+//    If all properties have default values, the compiler creates an initializer
+//    that takes no arguments. With this initializer,
+//    you can create a new instance by calling Data().
+    
+ 
+    struct Data {
+        var title: String = ""
+        var attendees: [Attendee] = []
+        var lengthInMinutes: Double = 5
+        var theme: Theme = .oxblood
+    }
+    
+    //computed property
+    var data: Data {
+        Data(title: title, attendees: attendees, lengthInMinutes: Double(lengthInMinutes), theme: theme)
     }
 }

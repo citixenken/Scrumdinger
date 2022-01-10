@@ -10,6 +10,8 @@ import SwiftUI
 struct DetailView: View {
     let scrum: DailyScrum
     
+    @State private var isPresentingEditView = false
+    
     var body: some View {
         List {
             //static view
@@ -17,13 +19,13 @@ struct DetailView: View {
                 NavigationLink(destination: MeetingView()) {
                     Label("Start Meeting", systemImage: "timer")
                         .font(.headline)
-                    .foregroundColor(.accentColor)
+                        .foregroundColor(.accentColor)
                 }
                 
                 HStack {
                     Label("Meeting Duration", systemImage: "clock")
                     Spacer()
-                    Text("\(scrum.lengthOfMinutes) mins")
+                    Text("\(scrum.lengthInMinutes) mins")
                 }
                 .accessibilityElement(children: .combine) //combines label and text as one element == one statement
                 
@@ -53,6 +55,29 @@ struct DetailView: View {
             }
         }
         .navigationTitle(scrum.title)
+        .sheet(isPresented: $isPresentingEditView) {
+            NavigationView {
+                DetailEditView()
+                    .navigationTitle(scrum.title)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
+                                isPresentingEditView = false
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") {
+                                isPresentingEditView = false
+                            }
+                        }
+                    }
+            }
+        }
+        .toolbar {
+            Button("Edit") {
+                isPresentingEditView = true
+            }
+        }
     }
 }
 
