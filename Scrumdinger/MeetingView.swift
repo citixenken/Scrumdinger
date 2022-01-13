@@ -6,11 +6,16 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct MeetingView: View {
     @Binding var scrum: DailyScrum
     //source of truth
     @StateObject var scrumTimer = ScrumTimer()
+    
+    private var player: AVPlayer {
+        AVPlayer.sharedDingPlayer
+    }
     
     var body: some View {
         ZStack {
@@ -19,23 +24,24 @@ struct MeetingView: View {
             VStack {
                 MeetingHeaderView(secondsElapsed: scrumTimer.secondsElapsed, secondsRemaining: scrumTimer.secondsRemaining, theme: scrum.theme)
                 Circle()
-                    .strokeBorder(lineWidth: 10)
-                
-                HStack {
-                    Text("Speaker 1 of 3")
-                    
-                    Spacer()
-                    
-                    Button(action: {}){
-                        Image(systemName: "forward.fill")
-                    }
-                    .accessibilityLabel("Next Speaker")
-                }
+                    .strokeBorder(lineWidth: 24, antialiased: true)
+                MeetingFooterView(speakers: scrumTimer.speakers, skipAction: scrumTimer.skipSpeaker)
             }
         }
         //handles global view padding
         .padding()
         .foregroundColor(scrum.theme.accentColor)
+        .onAppear {
+            scrumTimer.reset(lengthInMinutes: scrum.lengthInMinutes, attendees: scrum.attendees)
+            scrumTimer.speakerChangedAction = {
+                player.seek(to: .zero)
+                player.play()
+            }
+            scrumTimer.startScrum()
+        }
+        .onDisappear {
+            scrumTimer.stopScrum()
+        }
         .navigationBarTitleDisplayMode(.inline)
         
     }
@@ -43,6 +49,6 @@ struct MeetingView: View {
 
 struct MeetingView_Previews: PreviewProvider {
     static var previews: some View {
-        MeetingView(scrum: .constant(DailyScrum.sampleData[0]))
+        MeetingView(scrum: .constant(DailyScrum.sampleData[2]))
     }
 }
