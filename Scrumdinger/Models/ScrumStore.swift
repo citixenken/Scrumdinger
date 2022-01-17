@@ -63,8 +63,8 @@ class ScrumStore: ObservableObject {
                 switch result {
                 case .failure(let error):
                     continuation.resume(throwing: error)
-                case .success(let scrums):
-                    continuation.resume(returning: scrums)
+                case .success(let scrumsSaved):
+                    continuation.resume(returning: scrumsSaved)
                 }
             }
         }
